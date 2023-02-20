@@ -1,0 +1,9 @@
+{
+	"name": "ChangeDataCaptureADF",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6e971ca2-4894-4a91-8b91-d9001f74e778",
+		"tenantId": "90d12e33-ad5e-4e82-8b5e-82bff0658ae0"
+	}
+}
