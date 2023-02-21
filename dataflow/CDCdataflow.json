@@ -44,6 +44,7 @@
 				"     format: 'table') ~> source1",
 				"source1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['Employee.csv'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
