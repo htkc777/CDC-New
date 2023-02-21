@@ -6,55 +6,58 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "CDCDataSet",
+						"referenceName": "AzureSqlEmployeeTableDataSet",
 						"type": "DatasetReference"
 					},
-					"name": "CDCSource"
+					"name": "source1"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "CDCDataSetTable",
+						"referenceName": "EmployeeBlobDataSet",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "AzureDataLakeStorageLinkedService",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
-			"transformations": [
-				{
-					"name": "UpsertAlterRow"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
-				"          id as string,",
-				"          first_name as string,",
-				"          last_name as string,",
-				"          email as string,",
-				"          gender as string,",
-				"          ip_address as string",
+				"          id as integer,",
+				"          EMP_First_name as string,",
+				"          EMP_Last_name as string,",
+				"          EMP_Email as string,",
+				"          EMP_Gender as string,",
+				"          EMP_Address as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     enableCdc: true,",
-				"     mode: 'read',",
+				"     enableNativeCdc: true,",
+				"     netChanges: true,",
 				"     skipInitialLoad: false,",
-				"     partitionBy('hash', 1)) ~> CDCSource",
-				"CDCSource alterRow(upsertIf(true()),",
-				"     partitionBy('hash', 1)) ~> UpsertAlterRow",
-				"UpsertAlterRow sink(allowSchemaDrift: true,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:false,",
-				"     updateable:false,",
-				"     upsertable:true,",
-				"     keys:['id'],",
-				"     format: 'table',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     mapColumn(",
+				"          id,",
+				"          EMP_First_name,",
+				"          EMP_Last_name,",
+				"          EMP_Email,",
+				"          EMP_Gender,",
+				"          EMP_Address",
+				"     ),",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
