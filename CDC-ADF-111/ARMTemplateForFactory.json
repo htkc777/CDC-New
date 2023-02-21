@@ -49,7 +49,17 @@
 								"parameters": {},
 								"datasetParameters": {
 									"source1": {},
-									"sink1": {}
+									"sink1": {
+										"Directory": {
+											"value": "@concat(formatDateTime(utcnow(),'yyyy'),'/',formatDateTime(utcnow(),'MM'),'/',formatDateTime(utcnow(),'dd'),'/')",
+											"type": "Expression"
+										}
+									}
+								},
+								"linkedServiceParameters": {
+									"sink1": {
+										"schemaLinkedService": {}
+									}
 								}
 							},
 							"staging": {},
@@ -59,7 +69,7 @@
 							},
 							"traceLevel": "Fine",
 							"continuationSettings": {
-								"customizedCheckpointKey": "3eda6117-68b2-41b7-8310-075583b80b65"
+								"customizedCheckpointKey": "dcc304ad-23f3-4217-816a-9da0fe9075c8"
 							}
 						}
 					}
@@ -130,11 +140,20 @@
 					"referenceName": "AzureDataLakeStorageLinkedService",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"Directory": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@dataset().Directory",
+							"type": "Expression"
+						},
 						"fileSystem": "cdcoutput"
 					},
 					"columnDelimiter": ",",
@@ -226,6 +245,7 @@
 						"     format: 'table') ~> source1",
 						"source1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     partitionFileNames:['Employee.csv'],",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
