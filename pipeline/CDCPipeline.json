@@ -17,7 +17,15 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "CDCdataflow",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"sink1": {
+								"Directory": {
+									"value": "@concat(formatDateTime(utcnow(),'yyyy'),'/',formatDateTime(utcnow(),'MM'),'/',formatDateTime(utcnow(),'dd'),'/')",
+									"type": "Expression"
+								}
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
@@ -25,7 +33,7 @@
 					},
 					"traceLevel": "Fine",
 					"continuationSettings": {
-						"customizedCheckpointKey": "3eda6117-68b2-41b7-8310-075583b80b65"
+						"customizedCheckpointKey": "dcc304ad-23f3-4217-816a-9da0fe9075c8"
 					}
 				}
 			}
