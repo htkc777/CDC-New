@@ -1,0 +1,9 @@
+{
+	"name": "CDC-ADF-111",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "21f41e2e-f486-477b-a462-b89943c51e83",
+		"tenantId": "90d12e33-ad5e-4e82-8b5e-82bff0658ae0"
+	}
+}
