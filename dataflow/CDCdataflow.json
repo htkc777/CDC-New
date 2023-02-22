@@ -57,8 +57,7 @@
 				"          EMP_Email,",
 				"          EMP_Gender,",
 				"          EMP_Address",
-				"     ),",
-				"     partitionBy('hash', 1)) ~> sink1"
+				"     )) ~> sink1"
 			]
 		}
 	}
