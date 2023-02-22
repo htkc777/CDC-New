@@ -42,8 +42,7 @@
 				"     skipInitialLoad: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 derive(OpertionType = iif(isInsert(1),'INSERTED',iif(isUpdate(1),'UPDATED','DELETED'))\r",
-				") ~> derivedColumn",
+				"source1 derive(OpertionType = iif(isInsert(1),'INSERTED',iif(isUpdate(1),'UPDATED','DELETED'))) ~> derivedColumn",
 				"derivedColumn sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:true,",
@@ -55,6 +54,15 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          CUST_id,",
+				"          CUST_First_name,",
+				"          CUST_Last_name,",
+				"          CUST_Email,",
+				"          CUST_Gender,",
+				"          CUST_City,",
+				"          OpertionType",
+				"     ),",
 				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
