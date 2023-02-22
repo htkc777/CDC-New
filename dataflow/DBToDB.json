@@ -18,7 +18,11 @@
 						"referenceName": "AzureSqlDestCustomerTable",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "AzureDataLakeStorageLinkedService",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
 			"transformations": [
@@ -55,15 +59,6 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
-				"     mapColumn(",
-				"          CUST_id,",
-				"          CUST_First_name,",
-				"          CUST_Last_name,",
-				"          CUST_Email,",
-				"          CUST_Gender,",
-				"          CUST_City,",
-				"          OpertionType",
-				"     ),",
 				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
