@@ -42,7 +42,7 @@
 				"     skipInitialLoad: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 derive(OperationType = iif(isInsert(1),'INSERTED',iif(isUpdate(1),'UPDATED','DELETED'))) ~> derivedColumn1",
+				"source1 derive(OpertionType = iif(isInsert(1),'INSERTED',iif(isUpdate(1),'UPDATED','DELETED'))) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:true,",
