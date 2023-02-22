@@ -44,7 +44,7 @@
 				"     format: 'table') ~> source1",
 				"source1 derive(OpertionType = iif(isInsert(1),'INSERTED',\r",
 				"iif(isUpdate(1),'UPDATED',\r",
-				"iif(isDelete(1),'DELETED','DELETED')))) ~> derivedColumn",
+				"iif(isDelete(1),'DELETED','')))) ~> derivedColumn",
 				"derivedColumn sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:true,",
