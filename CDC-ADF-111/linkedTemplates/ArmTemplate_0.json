@@ -469,7 +469,8 @@
 						"interval": 15
 					},
 					"mode": "Microbatch"
-				}
+				},
+				"status": "Started"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseLinkedService')]",
@@ -729,6 +730,37 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/CDCdataflow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "CDCPipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 3,
+						"startTime": "2023-02-22T11:04:00",
+						"endTime": "2023-02-23T11:30:00",
+						"timeZone": "India Standard Time"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/CDCPipeline')]"
 			]
 		}
 	]
