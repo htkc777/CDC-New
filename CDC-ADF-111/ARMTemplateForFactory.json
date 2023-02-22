@@ -403,7 +403,11 @@
 								"referenceName": "AzureSqlDestCustomerTable",
 								"type": "DatasetReference"
 							},
-							"name": "sink1"
+							"name": "sink1",
+							"rejectedDataLinkedService": {
+								"referenceName": "AzureDataLakeStorageLinkedService",
+								"type": "LinkedServiceReference"
+							}
 						}
 					],
 					"transformations": [
@@ -426,9 +430,11 @@
 						"     netChanges: true,",
 						"     skipInitialLoad: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> source1",
+						"     format: 'table',",
+						"     partitionBy('hash', 1)) ~> source1",
 						"source1 derive(OpertionType = iif(isInsert(1),'INSERTED',\r",
-						"iif(isUpdate(1),'UPDATED','DELETED'))) ~> derivedColumn",
+						"iif(isUpdate(1),'UPDATED','DELETED')),",
+						"     partitionBy('hash', 1)) ~> derivedColumn",
 						"derivedColumn sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:true,",
@@ -440,22 +446,14 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError',",
-						"     mapColumn(",
-						"          CUST_id,",
-						"          CUST_First_name,",
-						"          CUST_Last_name,",
-						"          CUST_Email,",
-						"          CUST_Gender,",
-						"          CUST_City,",
-						"          OpertionType",
-						"     ),",
 						"     partitionBy('hash', 1)) ~> sink1"
 					]
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureSqlCustomerTableDataSet')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlDestCustomerTable')]"
+				"[concat(variables('factoryId'), '/datasets/AzureSqlDestCustomerTable')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageLinkedService')]"
 			]
 		}
 	]
