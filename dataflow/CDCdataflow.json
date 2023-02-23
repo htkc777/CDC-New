@@ -25,11 +25,7 @@
 					}
 				}
 			],
-			"transformations": [
-				{
-					"name": "alterRow1"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          id as integer,",
@@ -45,13 +41,9 @@
 				"     netChanges: true,",
 				"     skipInitialLoad: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table',",
-				"     partitionColumn: 'id',",
-				"     partitionBy('external', 3)) ~> source1",
-				"source1 alterRow(updateIf(true())) ~> alterRow1",
-				"alterRow1 sink(allowSchemaDrift: true,",
+				"     format: 'table') ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['Employee.csv'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
