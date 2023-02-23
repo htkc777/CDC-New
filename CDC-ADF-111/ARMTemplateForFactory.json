@@ -133,7 +133,11 @@
 							}
 						}
 					],
-					"transformations": [],
+					"transformations": [
+						{
+							"name": "alterRow1"
+						}
+					],
 					"scriptLines": [
 						"source(output(",
 						"          id as integer,",
@@ -152,7 +156,8 @@
 						"     format: 'table',",
 						"     partitionColumn: 'id',",
 						"     partitionBy('external', 3)) ~> source1",
-						"source1 sink(allowSchemaDrift: true,",
+						"source1 alterRow(updateIf(true())) ~> alterRow1",
+						"alterRow1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     partitionFileNames:['Employee.csv'],",
 						"     umask: 0022,",
@@ -160,14 +165,7 @@
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     mapColumn(",
-						"          id,",
-						"          EMP_First_name,",
-						"          EMP_Last_name,",
-						"          EMP_Email,",
-						"          EMP_Gender,",
-						"          EMP_Address",
-						"     )) ~> sink1"
+						"     partitionBy('hash', 1)) ~> sink1"
 					]
 				}
 			},
