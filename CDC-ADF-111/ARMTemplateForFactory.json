@@ -49,12 +49,7 @@
 								"parameters": {},
 								"datasetParameters": {
 									"source1": {},
-									"sink1": {
-										"Directory": {
-											"value": "@concat(formatDateTime(utcnow(),'yyyy'),'/',formatDateTime(utcnow(),'MM'),'/',formatDateTime(utcnow(),'dd'),'/')",
-											"type": "Expression"
-										}
-									}
+									"sink1": {}
 								}
 							},
 							"staging": {},
@@ -64,7 +59,7 @@
 							},
 							"traceLevel": "Fine",
 							"continuationSettings": {
-								"customizedCheckpointKey": "dcc304ad-23f3-4217-816a-9da0fe9075c8"
+								"customizedCheckpointKey": "10e6c568-b69e-436c-9a9c-86f74832bf10"
 							}
 						}
 					}
@@ -77,89 +72,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/CDCdataflow')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlEmployeeTableDataSet')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabaseLinkedService",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "EMP_First_name",
-						"type": "varchar"
-					},
-					{
-						"name": "EMP_Last_name",
-						"type": "varchar"
-					},
-					{
-						"name": "EMP_Email",
-						"type": "varchar"
-					},
-					{
-						"name": "EMP_Gender",
-						"type": "varchar"
-					},
-					{
-						"name": "EMP_Address",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Employee"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseLinkedService')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/EmployeeBlobDataSet')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorageLinkedService",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"Directory": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": {
-							"value": "@dataset().Directory",
-							"type": "Expression"
-						},
-						"fileSystem": "cdcoutput"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageLinkedService')]"
 			]
 		},
 		{
@@ -237,7 +149,9 @@
 						"     netChanges: true,",
 						"     skipInitialLoad: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> source1",
+						"     format: 'table',",
+						"     partitionColumn: 'id',",
+						"     partitionBy('external', 3)) ~> source1",
 						"source1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     partitionFileNames:['Employee.csv'],",
@@ -259,8 +173,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureSqlEmployeeTableDataSet')]",
-				"[concat(variables('factoryId'), '/datasets/EmployeeBlobDataSet')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageLinkedService')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageLinkedService')]",
+				"[concat(variables('factoryId'), '/datasets/EmployeeBlobDataSet')]"
 			]
 		},
 		{
@@ -445,6 +359,80 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlEmployeeTableDataSet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabaseLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "EMP_First_name",
+						"type": "varchar"
+					},
+					{
+						"name": "EMP_Last_name",
+						"type": "varchar"
+					},
+					{
+						"name": "EMP_Email",
+						"type": "varchar"
+					},
+					{
+						"name": "EMP_Gender",
+						"type": "varchar"
+					},
+					{
+						"name": "EMP_Address",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Employee"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseLinkedService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EmployeeBlobDataSet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageLinkedService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "cdcinput"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageLinkedService')]"
 			]
 		}
 	]
