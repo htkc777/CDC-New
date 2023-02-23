@@ -1,9 +1,9 @@
 {
-	"name": "sql to sql pipeline",
+	"name": "dbToAdls",
 	"properties": {
 		"activities": [
 			{
-				"name": "from sql to sql",
+				"name": "dbToAdls",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dbTodb",
+						"referenceName": "dbToAdls",
 						"type": "DataFlowReference"
 					},
 					"compute": {
@@ -25,7 +25,7 @@
 					},
 					"traceLevel": "Fine",
 					"continuationSettings": {
-						"customizedCheckpointKey": "707c0349-6616-4ca8-b173-18a808cf1de5"
+						"customizedCheckpointKey": "f5d2cf99-d2a3-43fa-a58d-ffcb652037a4"
 					}
 				}
 			}
